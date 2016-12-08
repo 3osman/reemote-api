@@ -1,11 +1,12 @@
 # README
 
-Backend for the live videos search platform. Rails 5.
+Backend for the live videos search platform. 
+Ruby 2.3, Rails 5.
 
 Instructions:
 
 * Clone the code
-* Run 
+* Install gem dependencies
 ```
 bundle install
 ```
