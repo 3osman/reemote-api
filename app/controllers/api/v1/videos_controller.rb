@@ -8,7 +8,7 @@ module Api::V1
     	platforms = params['platforms'] || "youtube,periscope"
     	num = params['num'] || 1
     	you_vids = get_youtube(query,num)
-    	get_periscope(query,num)
+    	#get_periscope(query,num)
     	#puts response.body, response.code, response.message, response.headers.inspect
     	render json: {"response":you_vids}
     end
