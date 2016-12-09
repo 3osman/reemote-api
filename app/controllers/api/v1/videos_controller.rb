@@ -7,13 +7,24 @@ module Api::V1
     	query =  params['query']
     	platforms = params['platforms'] || "youtube,periscope"
     	num = params['num'] || 1
-    	puts query
-    	puts platforms
-    	puts num
-    	response = HTTParty.get('https://www.googleapis.com/youtube/v3/search?key='+ENV["google_api_key"]+'&maxResults=5&part=id,snippet&q=test&eventType=live&type=video')
-    	#puts $twitter_client.search("Renan preside o Senado neste momento: o triunfo do cinismo e a derrota do Estado de Direito filter:periscope").to_json
+    	you_vids = get_youtube(query,num)
+    	get_periscope(query,num)
     	#puts response.body, response.code, response.message, response.headers.inspect
-    	render json: {"search_query":query}
+    	render json: {"response":you_vids}
+    end
+
+    def get_youtube(query,num)
+    	#maxResults = "&maxResults=5"
+    	maxResults = ""
+    	response = HTTParty.get("https://www.googleapis.com/youtube/v3/search?key="+ENV["google_api_key"]+"#{maxResults}"+"&part=id&q=#{query}&eventType=live&type=video&videoEmbeddable=true")
+    	#ids = response['items'].map{ |it| it['id']['videoId']}.join(',')
+    	#video_players = HTTParty.get("https://www.googleapis.com/youtube/v3/videos?key="+ENV["google_api_key"]+"&part=player&id=#{ids}")
+    	#vids = Array.new
+    	video_players = response['items'].map{ |it| "//www.youtube.com/embed/#{it['id']['videoId']}"}.join(',')
+    	return video_players
+    end
+    def get_periscope(query,num)
+    	$twitter_client.search("#{query} filter:periscope").to_json
     end
 
   end
