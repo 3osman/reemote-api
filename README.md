@@ -20,3 +20,7 @@ GET /v1/videos/search?query=SEARCH_QUERY&platforms=PLATFORMS&num=PAGE_NUM
 ```
 where ```platforms``` is a comma separated list of services (e.g: ```platforms=youtube,periscope```)
 and ```num``` is an integer value
+
+| Response      |                                                   | 
+| ------------- |:-------------------------------------------------:| 
+| videos        | **list** video(streaming_url, browser_url, title) |
