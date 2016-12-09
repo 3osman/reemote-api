@@ -14,12 +14,13 @@ module Api::V1
 
     def get_youtube(query,num)
     	maxResults = "&maxResults=50"
-    	response = HTTParty.get("https://www.googleapis.com/youtube/v3/search?key="+ENV["google_api_key"]+"#{maxResults}"+"&part=id&q=#{query}&eventType=live&type=video&videoEmbeddable=true")
+    	response = HTTParty.get("https://www.googleapis.com/youtube/v3/search?key="+ENV["google_api_key"]+"#{maxResults}"+"&part=id,snippet&q=#{query}&eventType=live&type=video&videoEmbeddable=true")
+    	video_titles = response['items'].map{ |it| it['snippet']['title'] }.join(',')
     	video_players = response['items'].map{ |it| "//www.youtube.com/embed/#{it['id']['videoId']}"}.join(',')
     	video_urls = response['items'].map {|it| "https://www.youtube.com/watch?v=#{it['id']['videoId']}"}.join(',')
-    	return video_urls
+    	return video_titles
     end
-    
+
     def get_periscope(query,num)
     	$twitter_client.search("#{query} filter:periscope").to_json
     end
