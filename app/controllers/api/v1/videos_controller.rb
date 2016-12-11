@@ -20,13 +20,15 @@ module Api::V1
     end
 
     def get_periscope(query,num)
-    	return $twitter_client.search("#Periscope'ta CANLI filter:periscope -rt", result_type: "recent", count: 2).to_json
+        #return $twitter_client.search("#ruby -rt", lang: "ja")
+
+    	return $twitter_client.search("live from the moon filter:periscope -rt", result_type: "recent", count: 5)
     end
 
     def handle_youtube_videos(response)
         videos = Array.new
         JSON.parse(response.body)["items"].each do |it|
-           item = {"platform": "youtube","title": it["snippet"]["title"], "streaming_url": "//www.youtube.com/embed/" + it["id"]["videoId"], "browser_url": "https://www.youtube.com/watch?v=" + it["id"]["videoId"] }
+           item = {"platform": "youtube","title": it["snippet"]["title"], "thumbnail": it["snippet"]["thumbnails"]["default"]["url"],"streaming_url": "//www.youtube.com/embed/" + it["id"]["videoId"], "browser_url": "https://www.youtube.com/watch?v=" + it["id"]["videoId"] }
            videos.push item
         end
         return videos
