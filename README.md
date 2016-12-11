@@ -39,4 +39,4 @@ GET /v1/videos/info?id=VIDEO_ID&platform=PLATFORM
 
 | Response      |                                                                  | 
 | ------------- |:-----------------------------------------------------------------| 
-| info        | viewers |
+| video        |  title, thumbnail, streaming_url, browser_url, viewers  |
