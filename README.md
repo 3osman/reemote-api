@@ -34,7 +34,7 @@ where ```platforms``` is a comma separated list of services (e.g: ```platforms=y
 | PLATFORM : videos        | **list**<br /> video(title, thumbnail, streaming_url, browser_url) |
 
 ```
-GET /v1/videos/info?url=URL&platform=PLATFORM
+GET /v1/videos/info?id=VIDEO_ID&platform=PLATFORM
 ```
 
 | Response      |                                                                  | 

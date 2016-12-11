@@ -50,15 +50,12 @@ module Api::V1
     end
     # GET /v1/info
     def info
-        url = params["url"]
+        id = params["id"]
         case params["platform"]
             when "youtube"
-                id = url.split("=").last
-                puts id
                 response = HTTParty.get("https://www.googleapis.com/youtube/v3/videos?key="+ENV["google_api_key"]+"&id=" + id + "&part=statistics")
                 viewers =  JSON.parse(response.body)["items"].first['statistics']['viewCount']
             when "twitch"
-                id = url.split("/").last
                 response = HTTParty.get("https://api.twitch.tv/kraken/streams/"+ id, headers: {'Client-ID' => ENV["twitch_client_id"]})     
                 viewers = JSON.parse(response.body)['stream']['viewers']
             else
