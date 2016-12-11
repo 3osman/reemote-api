@@ -10,16 +10,14 @@ module Api::V1
     	platforms = params['platforms'] || "youtube,twitch"
     	num = params['num'] || 1
         all_vids = Array.new
-    	#you_vids = get_youtube(query,num)
-    	#you_vids = get_periscope(query,num)
+        #all_vids.push get_periscope(query,num) if platforms.include? "periscope"
         all_vids.push get_twitch(query,num) if platforms.include? "twitch"
         all_vids.push get_youtube(query,num) if platforms.include? "youtube"
-
     	render json: all_vids
     end
     def get_youtube(query,num)
     	maxResults = "&maxResults=50"
-    	response = HTTParty.get("https://www.googleapis.com/youtube/v3/search?key="+ENV["google_api_key"]+"#{maxResults}"+"&part=id,snippet&q=#{query}&eventType=live&type=video&videoEmbeddable=true")     
+    	response = HTTParty.get("https://www.googleapis.com/youtube/v3/search?key="+ENV["google_api_key"]+"#{maxResults}"+"&part=id,snippet&q=#{query}&eventType=live&type=video&videoEmbeddable=true&order=viewCount")     
       	return handle_youtube_videos(response)
     end
 
@@ -50,14 +48,8 @@ module Api::V1
         end
         return videos
     end
-
-
   end
 end
-
-
-
-
 
 #ids = response['items'].map{ |it| it['id']['videoId']}.join(',')
     	#video_players = HTTParty.get("https://www.googleapis.com/youtube/v3/videos?key="+ENV["google_api_key"]+"&part=player&id=#{ids}")
