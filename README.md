@@ -31,4 +31,4 @@ and ```num``` is an integer value
 
 | Response      |                                                                  | 
 | ------------- |:-----------------------------------------------------------------| 
-| videos        | **list**<br />video(platform, title, streaming_url, browser_url) |
+| videos        | **list**<br />video(platform, title, thumbnail, streaming_url, browser_url) |
