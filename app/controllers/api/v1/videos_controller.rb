@@ -27,10 +27,6 @@ module Api::V1
         return handle_twitch_videos(response)
     end
 
-    def get_periscope(query,num)
-    	return $twitter_client.search("live from the moon filter:periscope -rt", result_type: "recent", count: 5)
-    end
-
     def handle_youtube_videos(response)
         videos = Array.new
         JSON.parse(response.body)["items"].each do |it|
@@ -70,19 +66,3 @@ module Api::V1
     end
   end
 end
-
-#ids = response['items'].map{ |it| it['id']['videoId']}.join(',')
-    	#video_players = HTTParty.get("https://www.googleapis.com/youtube/v3/videos?key="+ENV["google_api_key"]+"&part=player&id=#{ids}")
-    	#vids = Array.new
-
-
-         # video_titles = response['items'].map{ |it| it['snippet']['title'] }.join(',')
-        #video_players = response['items'].map{ |it| "//www.youtube.com/embed/#{it['id']['videoId']}"}.join(',')
-        #video_urls = response['items'].map {|it| "https://www.youtube.com/watch?v=#{it["id"]["videoId"]}"}.join(',')
-    
-
-     # item["platform"] = "youtube"
-            #item["title"] = it["snippet"]["title"]
-            #item["streaming_url"] = "//www.youtube.com/embed/" + it["id"]["videoId"]
-            #item["browser_url"] = "https://www.youtube.com/watch?v=" + it["id"]["videoId"]
-           
