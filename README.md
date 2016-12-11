@@ -23,7 +23,7 @@ twith_client_id: <your_twitch_client_id>
 ```
 rails s puma
 ```
-* Current available method is 
+* Current available methods  
 ```
 GET /v1/videos/search?query=SEARCH_QUERY&platforms=PLATFORMS
 ```
@@ -31,4 +31,12 @@ where ```platforms``` is a comma separated list of services (e.g: ```platforms=y
 
 | Response      |                                                                  | 
 | ------------- |:-----------------------------------------------------------------| 
-| videos        | **list**<br />video(platform, title, thumbnail, streaming_url, browser_url) |
+| videos        | **list**<br />PLATFORM: videos(title, thumbnail, streaming_url, browser_url) |
+
+```
+GET /v1/videos/info?url=URL&platform=PLATFORM
+```
+
+| Response      |                                                                  | 
+| ------------- |:-----------------------------------------------------------------| 
+| info        | viewers |
