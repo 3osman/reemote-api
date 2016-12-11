@@ -10,22 +10,26 @@ module Api::V1
     	platforms = params['platforms'] || "youtube,periscope"
     	num = params['num'] || 1
     	you_vids = get_youtube(query,num)
-    	#get_periscope(query,num)
+    	#you_vids = get_periscope(query,num)
     	render json: you_vids
     end
     def get_youtube(query,num)
     	maxResults = "&maxResults=50"
-    	response = HTTParty.get("https://www.googleapis.com/youtube/v3/search?key="+ENV["google_api_key"]+"#{maxResults}"+"&part=id,snippet&q=#{query}&eventType=live&type=video&videoEmbeddable=true") 
-        videos = Array.new       
-        JSON.parse(response.body)["items"].each do |it|
-           item = {"platform": "youtube","title": it["snippet"]["title"], "streaming_url": "//www.youtube.com/embed/" + it["id"]["videoId"], "browser_url": "https://www.youtube.com/watch?v=" + it["id"]["videoId"] }
-           videos.push item
-        end 
-      	return videos
+    	response = HTTParty.get("https://www.googleapis.com/youtube/v3/search?key="+ENV["google_api_key"]+"#{maxResults}"+"&part=id,snippet&q=#{query}&eventType=live&type=video&videoEmbeddable=true")     
+      	return handle_youtube_videos(response)
     end
 
     def get_periscope(query,num)
-    	$twitter_client.search("#{query} filter:periscope").to_json
+    	return $twitter_client.search("#Periscope'ta CANLI filter:periscope -rt", result_type: "recent", count: 2).to_json
+    end
+
+    def handle_youtube_videos(response)
+        videos = Array.new
+        JSON.parse(response.body)["items"].each do |it|
+           item = {"platform": "youtube","title": it["snippet"]["title"], "streaming_url": "//www.youtube.com/embed/" + it["id"]["videoId"], "browser_url": "https://www.youtube.com/watch?v=" + it["id"]["videoId"] }
+           videos.push item
+        end
+        return videos
     end
 
   end
