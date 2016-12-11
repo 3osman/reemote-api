@@ -17,6 +17,7 @@ twitter_consumer_key: <your_twitter_consumer_key>
 twitter_consumer_secret: <your_twitter_consumer_secret>
 twitter_access_token_key: <your_twitter_access_token_key>
 twitter_access_token_secret: <your_twitter_access_token_secret>
+twith_client_id: <your_twitch_client_id>
 ```
 * Start the server 
 ```
@@ -24,10 +25,9 @@ rails s puma
 ```
 * Current available method is 
 ```
-GET /v1/videos/search?query=SEARCH_QUERY&platforms=PLATFORMS&num=PAGE_NUM
+GET /v1/videos/search?query=SEARCH_QUERY&platforms=PLATFORMS
 ```
-where ```platforms``` is a comma separated list of services (e.g: ```platforms=youtube,periscope```)
-and ```num``` is an integer value
+where ```platforms``` is a comma separated list of services (e.g: ```platforms=youtube,twitch```)
 
 | Response      |                                                                  | 
 | ------------- |:-----------------------------------------------------------------| 
