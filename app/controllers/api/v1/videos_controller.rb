@@ -10,7 +10,6 @@ module Api::V1
             query =  params['query']
             platforms = params['platforms'] || "youtube,twitch"
             all_vids = Hash.new
-            #all_vids.push get_periscope(query,num) if platforms.include? "periscope"
             all_vids["youtube"] = get_youtube(query) if platforms.include? "youtube"
             all_vids["twitch"] = get_twitch(query) if platforms.include? "twitch"
         end
@@ -25,6 +24,10 @@ module Api::V1
     def get_twitch(query)
         response = HTTParty.get("https://api.twitch.tv/kraken/search/streams?limit=20&q="+query+"&stream_type=live", headers: {'Client-ID' => ENV["twitch_client_id"]})     
         return handle_twitch_videos(response)
+    end
+    def get_ustream(query)
+        response = HTTParty.get("http://api.ustream.tv/html/channel/live/search/title:like:#{query}?key="+ ENV["ustream_api_key"])
+        return handle_ustream_videos(response)
     end
 
     def handle_youtube_videos(response)
@@ -54,7 +57,7 @@ module Api::V1
                     response = HTTParty.get("https://www.googleapis.com/youtube/v3/videos?key="+ENV["google_api_key"]+"&id=" + id + "&part=statistics,snippet")
                     if JSON.parse(response.body)["pageInfo"]["totalResults"] > 0
                         video = JSON.parse(response.body)["items"].first
-                        item = { "title": video["snippet"]["title"], "thumbnail": video["snippet"]["thumbnails"]["default"]["url"], "streaming_url": "//www.youtube.com/embed/" + id, "browser_url": "https://www.youtube.com/watch?v=" + id, "viewers": video['statistics']['viewCount'] }
+                        item = { "title": video["snippet"]["title"], "thumbnail": video["snippet"]["thumbnails"]["default"]["url"], "streaming_url": "//www.youtube.com/embed/" + id +"?autoplay=1", "browser_url": "https://www.youtube.com/watch?v=" + id, "viewers": video['statistics']['viewCount'] }
                     end
                 when "twitch"
                     response = HTTParty.get("https://api.twitch.tv/kraken/streams/" + id, headers: {'Client-ID' => ENV["twitch_client_id"]})     
