@@ -12,6 +12,8 @@ module Api::V1
             all_vids = Hash.new
             all_vids["youtube"] = get_youtube(query) if platforms.include? "youtube"
             all_vids["twitch"] = get_twitch(query) if platforms.include? "twitch"
+            all_vids["periscope"] = get_periscope(query) if platforms.include? "periscope"
+
         end
     	render json: all_vids
     end
@@ -25,9 +27,11 @@ module Api::V1
         response = HTTParty.get("https://api.twitch.tv/kraken/search/streams?limit=20&q="+query+"&stream_type=live", headers: {'Client-ID' => ENV["twitch_client_id"]})     
         return handle_twitch_videos(response)
     end
-    def get_ustream(query)
-        response = HTTParty.get("http://api.ustream.tv/html/channel/live/search/title:like:#{query}?key="+ ENV["ustream_api_key"])
-        return handle_ustream_videos(response)
+    def get_periscope(query)
+        response = HTTParty.get("https://www.periscope.tv/search?q=#{query}")
+        return handle_periscope_videos(response.split("data-store=")[1].split(">")[0].gsub! '&quot;','"')
+        #return handle_periscope_videos(().to_json)
+      #  return handle_periscope_videos(response.split("data-store=")[1].split(">")[0].gsub! '&quot;','"')
     end
 
     def handle_youtube_videos(response)
@@ -47,6 +51,27 @@ module Api::V1
            videos.push item
         end
         return videos
+    end
+    def handle_periscope_videos(response)
+        response[0] = ''
+        response[response.length-1]=''
+        videos = Array.new
+
+        JSON.parse(response)["BroadcastCache"]["broadcasts"].each do |k,v|
+            if v["broadcast"]["data"]["state"].eql?"RUNNING"
+                item = {"title": v["broadcast"]["data"]["status"], "thumbnail": v["broadcast"]["profile_image_url"],"streaming_url": "https://www.periscope.tv/w/"+k, "browser_url": "https://www.periscope.tv/w/"+k }
+
+                #title = v["broadcast"]["data"]["status"]
+                #watching = v["broadcast"]["data"]["n_total_watching"]
+                #thumbnail = v["broadcast"]["data"]["image_url"]
+                puts "https://www.periscope.tv/w/"+k
+                videos.push item
+
+            end
+        end
+        return videos
+        #return JSON.parse(response)
+        
     end
     # GET /v1/info
     def info
