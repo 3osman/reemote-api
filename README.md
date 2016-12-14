@@ -13,7 +13,7 @@ bundle install
 * Create a file config/application.yml and add your api keys in it in this format:
 ```
 google_api_key: <your_api_key>
-twith_client_id: <your_twitch_client_id>
+twitch_client_id: <your_twitch_client_id>
 ```
 * Start the server 
 ```
