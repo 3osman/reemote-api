@@ -58,10 +58,8 @@ module Api::V1
         JSON.parse(response)["BroadcastCache"]["broadcasts"].each do |k,v|
             
             if v["broadcast"]["data"]["state"].eql?"RUNNING"
-                image_url = (v["broadcast"]["image_url"]).gsub "amp;",""
-                #title = (v["broadcast"]["data"]["status"]).gsub "amp;",""
-                #title = title.gsub "&#x27;","'"
-                title = URI.unescape(v["broadcast"]["data"]["status"])
+                image_url = CGI::unescapeHTML(v["broadcast"]["image_url"])
+                title = CGI::unescapeHTML(v["broadcast"]["data"]["status"])
                 item = {"title": title, "thumbnail": image_url,"streaming_url": "https://www.periscope.tv/w/"+k, "browser_url": "https://www.periscope.tv/w/"+k }
                 videos.push item
             end
@@ -87,7 +85,6 @@ module Api::V1
                 when "periscope"
                     response = HTTParty.get("https://api.periscope.tv/api/v2/accessVideoPublic?broadcast_id=#{id}")
                     video = JSON.parse(response.body)
-                    #item = video
                     item = {"title": video["broadcast"]["status"], "thumbnail": video["broadcast"]["image_url"],"streaming_url": "https://www.periscope.tv/w/"+id, "browser_url": "https://www.periscope.tv/w/"+id, "hls_url": video["hls_url"]}
             end
         end
