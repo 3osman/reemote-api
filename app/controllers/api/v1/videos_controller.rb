@@ -30,8 +30,6 @@ module Api::V1
     def get_periscope(query)
         response = HTTParty.get("https://www.periscope.tv/search?q=#{query}")
         return handle_periscope_videos(response.split("data-store=")[1].split(">")[0].gsub! '&quot;','"')
-        #return handle_periscope_videos(().to_json)
-      #  return handle_periscope_videos(response.split("data-store=")[1].split(">")[0].gsub! '&quot;','"')
     end
 
     def handle_youtube_videos(response)
@@ -56,21 +54,15 @@ module Api::V1
         response[0] = ''
         response[response.length-1]=''
         videos = Array.new
-
+        puts JSON.parse(response)
         JSON.parse(response)["BroadcastCache"]["broadcasts"].each do |k,v|
+            image_url = (v["broadcast"]["image_url"]).gsub! "amp;",""
             if v["broadcast"]["data"]["state"].eql?"RUNNING"
-                item = {"title": v["broadcast"]["data"]["status"], "thumbnail": v["broadcast"]["profile_image_url"],"streaming_url": "https://www.periscope.tv/w/"+k, "browser_url": "https://www.periscope.tv/w/"+k }
-
-                #title = v["broadcast"]["data"]["status"]
-                #watching = v["broadcast"]["data"]["n_total_watching"]
-                #thumbnail = v["broadcast"]["data"]["image_url"]
-                puts "https://www.periscope.tv/w/"+k
+                item = {"title": v["broadcast"]["data"]["status"], "thumbnail": image_url,"streaming_url": "https://www.periscope.tv/w/"+k, "browser_url": "https://www.periscope.tv/w/"+k }
                 videos.push item
-
             end
         end
         return videos
-        #return JSON.parse(response)
         
     end
     # GET /v1/info
@@ -88,6 +80,10 @@ module Api::V1
                     response = HTTParty.get("https://api.twitch.tv/kraken/streams/" + id, headers: {'Client-ID' => ENV["twitch_client_id"]})     
                     video = JSON.parse(response.body)
                     item = {"title": video["stream"]["game"] + " : " + video["stream"]["channel"]["status"], "thumbnail": video["stream"]["preview"]["medium"],"streaming_url": "http://player.twitch.tv/?channel=" + id, "browser_url": "https://www.twitch.tv/" + id, "viewers": video['stream']['viewers']} if video["stream"]
+                when "periscope"
+                    response = HTTParty.get("https://api.periscope.tv/api/v2/accessVideoPublic?broadcast_id=#{id}")
+                    video = JSON.parse(response.body)
+                    item = {"title": video["broadcast"]["data"]["status"], "thumbnail": video["broadcast"]["image_url"],"streaming_url": "https://www.periscope.tv/w/"+k, "browser_url": "https://www.periscope.tv/w/"+k, "hls_url": video["hls_url"]}
             end
         end
         render json: item
