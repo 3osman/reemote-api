@@ -35,7 +35,8 @@ module Api::V1
     def handle_youtube_videos(response)
         videos = Array.new
         JSON.parse(response.body)["items"].each do |it|
-           item = {"title": it["snippet"]["title"], "thumbnail": it["snippet"]["thumbnails"]["default"]["url"],"streaming_url": "//www.youtube.com/embed/" + it["id"]["videoId"], "browser_url": "https://www.youtube.com/watch?v=" + it["id"]["videoId"] }
+           #item = {"title": it["snippet"]["title"], "thumbnail": it["snippet"]["thumbnails"]["default"]["url"],"streaming_url": "//www.youtube.com/embed/" + it["id"]["videoId"], "browser_url": "https://www.youtube.com/watch?v=" + it["id"]["videoId"] }
+           item = {"title": it["snippet"]["title"], "thumbnail": it["snippet"]["thumbnails"]["default"]["url"]}
            videos.push item
         end
         return videos
@@ -45,7 +46,8 @@ module Api::V1
         videos = Array.new
         JSON.parse(response.body)["streams"].each do |it|
            channel_name = it["channel"]["name"]
-           item = {"title": it["game"] + " : " + it["channel"]["status"], "thumbnail": it["preview"]["medium"],"streaming_url": "http://player.twitch.tv/?channel=" + channel_name, "browser_url": "https://www.twitch.tv/" + channel_name }
+           #item = {"title": it["game"] + " : " + it["channel"]["status"], "thumbnail": it["preview"]["medium"],"streaming_url": "http://player.twitch.tv/?channel=" + channel_name, "browser_url": "https://www.twitch.tv/" + channel_name }
+           item = {"title": it["game"] + " : " + it["channel"]["status"], "thumbnail": it["preview"]["medium"]}
            videos.push item
         end
         return videos
@@ -60,7 +62,8 @@ module Api::V1
             if v["broadcast"]["data"]["state"].eql?"RUNNING"
                 image_url = CGI::unescapeHTML(v["broadcast"]["image_url"])
                 title = CGI::unescapeHTML(v["broadcast"]["data"]["status"])
-                item = {"title": title, "thumbnail": image_url,"streaming_url": "https://www.periscope.tv/w/"+k, "browser_url": "https://www.periscope.tv/w/"+k }
+                #item = {"title": title, "thumbnail": image_url,"streaming_url": "https://www.periscope.tv/w/"+k, "browser_url": "https://www.periscope.tv/w/"+k }
+                item = item = {"title": title, "thumbnail": image_url}
                 videos.push item
             end
         end
