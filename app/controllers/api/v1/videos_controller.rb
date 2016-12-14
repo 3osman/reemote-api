@@ -56,9 +56,11 @@ module Api::V1
         videos = Array.new
         puts JSON.parse(response)
         JSON.parse(response)["BroadcastCache"]["broadcasts"].each do |k,v|
-            image_url = (v["broadcast"]["image_url"]).gsub! "amp;",""
+            
             if v["broadcast"]["data"]["state"].eql?"RUNNING"
-                item = {"title": v["broadcast"]["data"]["status"], "thumbnail": image_url,"streaming_url": "https://www.periscope.tv/w/"+k, "browser_url": "https://www.periscope.tv/w/"+k }
+                image_url = (v["broadcast"]["image_url"]).gsub! "amp;",""
+                title = (v["broadcast"]["data"]["status"]).gsub! "amp;",""
+                item = {"title": title, "thumbnail": image_url,"streaming_url": "https://www.periscope.tv/w/"+k, "browser_url": "https://www.periscope.tv/w/"+k }
                 videos.push item
             end
         end
