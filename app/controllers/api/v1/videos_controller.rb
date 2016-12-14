@@ -83,7 +83,8 @@ module Api::V1
                 when "periscope"
                     response = HTTParty.get("https://api.periscope.tv/api/v2/accessVideoPublic?broadcast_id=#{id}")
                     video = JSON.parse(response.body)
-                    item = {"title": video["broadcast"]["data"]["status"], "thumbnail": video["broadcast"]["image_url"],"streaming_url": "https://www.periscope.tv/w/"+k, "browser_url": "https://www.periscope.tv/w/"+k, "hls_url": video["hls_url"]}
+                    #item = video
+                    item = {"title": video["broadcast"]["status"], "thumbnail": video["broadcast"]["image_url"],"streaming_url": "https://www.periscope.tv/w/"+id, "browser_url": "https://www.periscope.tv/w/"+id, "hls_url": video["hls_url"]}
             end
         end
         render json: item
