@@ -5,7 +5,6 @@ Ruby 2.3, Rails 5.
 
 Instructions:
 
-* Clone the code
 * Install gem dependencies
 ```
 bundle install
