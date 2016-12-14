@@ -22,7 +22,7 @@ rails s puma
 ```
 GET /v1/videos/search?query=SEARCH_QUERY&platforms=PLATFORMS
 ```
-where ```platforms``` is a comma separated list of services (e.g: ```platforms=youtube,twitch```)
+where ```platforms``` is a comma separated list of services (e.g: ```platforms=youtube,twitch,periscope```)
 
 | Response      |                                                                  | 
 | ------------- |:-----------------------------------------------------------------| 
