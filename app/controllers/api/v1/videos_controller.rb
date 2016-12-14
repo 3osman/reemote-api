@@ -36,7 +36,7 @@ module Api::V1
         videos = Array.new
         JSON.parse(response.body)["items"].each do |it|
            #item = {"title": it["snippet"]["title"], "thumbnail": it["snippet"]["thumbnails"]["default"]["url"],"streaming_url": "//www.youtube.com/embed/" + it["id"]["videoId"], "browser_url": "https://www.youtube.com/watch?v=" + it["id"]["videoId"] }
-           item = {"title": it["snippet"]["title"], "thumbnail": it["snippet"]["thumbnails"]["default"]["url"]}
+           item = {"id": it["id"]["videoId"],"title": it["snippet"]["title"], "thumbnail": it["snippet"]["thumbnails"]["default"]["url"]}
            videos.push item
         end
         return videos
@@ -47,7 +47,7 @@ module Api::V1
         JSON.parse(response.body)["streams"].each do |it|
            channel_name = it["channel"]["name"]
            #item = {"title": it["game"] + " : " + it["channel"]["status"], "thumbnail": it["preview"]["medium"],"streaming_url": "http://player.twitch.tv/?channel=" + channel_name, "browser_url": "https://www.twitch.tv/" + channel_name }
-           item = {"title": it["game"] + " : " + it["channel"]["status"], "thumbnail": it["preview"]["medium"]}
+           item = {"id": channel_name,"title": it["game"] + " : " + it["channel"]["status"], "thumbnail": it["preview"]["medium"]}
            videos.push item
         end
         return videos
@@ -56,14 +56,14 @@ module Api::V1
         response[0] = ''
         response[response.length-1]=''
         videos = Array.new
-        puts JSON.parse(response)
+        #puts JSON.parse(response)
         JSON.parse(response)["BroadcastCache"]["broadcasts"].each do |k,v|
             
             if v["broadcast"]["data"]["state"].eql?"RUNNING"
                 image_url = CGI::unescapeHTML(v["broadcast"]["image_url"])
                 title = CGI::unescapeHTML(v["broadcast"]["data"]["status"])
                 #item = {"title": title, "thumbnail": image_url,"streaming_url": "https://www.periscope.tv/w/"+k, "browser_url": "https://www.periscope.tv/w/"+k }
-                item = item = {"title": title, "thumbnail": image_url}
+                item = item = {"id": k,"title": title, "thumbnail": image_url}
                 videos.push item
             end
         end

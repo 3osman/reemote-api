@@ -26,7 +26,7 @@ where ```platforms``` is a comma separated list of services (e.g: ```platforms=y
 
 | Response      |                                                                  | 
 | ------------- |:-----------------------------------------------------------------| 
-| PLATFORM : videos        | **list**<br /> video(title, thumbnail, streaming_url, browser_url) |
+| PLATFORM : videos        | **list**<br /> video(id, title, thumbnail) |
 
 ```
 GET /v1/videos/info?id=VIDEO_ID&platform=PLATFORM
