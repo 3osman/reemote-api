@@ -1,6 +1,7 @@
 # app/controllers/api/v1/videos_controller.rb
 require 'json'
 require 'uri'
+require "selenium-webdriver"
 module Api::V1
   class VideosController < ApiController
 
@@ -28,6 +29,8 @@ module Api::V1
         return handle_twitch_videos(response)
     end
     def get_periscope(query)
+        browser = Selenium::WebDriver.for :chrome
+        browser.get "https://www.periscope.tv/search?q=#{query}"
         response = HTTParty.get("https://www.periscope.tv/search?q=#{query}")
         return handle_periscope_videos(response.split("data-store=")[1].split(">")[0].gsub! '&quot;','"')
     end
