@@ -1,6 +1,6 @@
 # app/controllers/api/v1/videos_controller.rb
 require 'json'
-
+require 'uri'
 module Api::V1
   class VideosController < ApiController
 
@@ -59,7 +59,9 @@ module Api::V1
             
             if v["broadcast"]["data"]["state"].eql?"RUNNING"
                 image_url = (v["broadcast"]["image_url"]).gsub "amp;",""
-                title = (v["broadcast"]["data"]["status"]).gsub "amp;",""
+                #title = (v["broadcast"]["data"]["status"]).gsub "amp;",""
+                #title = title.gsub "&#x27;","'"
+                title = URI.unescape(v["broadcast"]["data"]["status"])
                 item = {"title": title, "thumbnail": image_url,"streaming_url": "https://www.periscope.tv/w/"+k, "browser_url": "https://www.periscope.tv/w/"+k }
                 videos.push item
             end
