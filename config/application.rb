@@ -33,5 +33,6 @@ module LiveApi
     end
     config.middleware.use Rack::Attack
     config.api_only = true
+    config.autoload_paths += %W(#{config.root}/lib)
   end
 end
