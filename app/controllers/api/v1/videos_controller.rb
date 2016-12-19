@@ -3,7 +3,7 @@ require 'json'
 require 'uri'
 module Api::V1
   class VideosController < ApiController
-    require 'lib/consumer.rb'
+    require './lib/consumer.rb'
     include DataProcessor
 
     # GET /v1/search
