@@ -1,5 +1,4 @@
 module DataProcessor
-    require 'json'
 
 	def process_search_results(platform, results)
 		case platform
@@ -16,7 +15,6 @@ module DataProcessor
 	def process_info(platform, video, id)
 		case platform
             when "youtube"
-                puts JSON.pretty_generate(video)
                 if JSON.parse(video.body)["pageInfo"]["totalResults"] > 0
                     video = JSON.parse(video.body)["items"].first
                     item = { "title": video["snippet"]["title"], "thumbnail": video["snippet"]["thumbnails"]["default"]["url"], "streaming_url": "//www.youtube.com/embed/" + id +"?autoplay=1", "browser_url": "https://www.youtube.com/watch?v=" + id, "viewers": video['statistics']['viewCount'] }
